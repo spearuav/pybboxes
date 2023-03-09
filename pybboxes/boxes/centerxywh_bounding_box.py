@@ -36,10 +36,7 @@ class CenterxywhBoundingBox(BaseBoundingBox):
             self._is_oob = False
 
     def to_voc(self, return_values: bool = False) -> Union[Tuple[int, int, int, int], "BoundingBox"]:
-        if self.is_image_size_null():
-            raise ValueError("'image_size' is required for conversion.")
         x_c, y_c, w, h = self.values
-        image_width, image_height = self.image_size
         x_tl = x_c - w / 2
         y_tl = y_c - h / 2
         x_br = x_tl + w
