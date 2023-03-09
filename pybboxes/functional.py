@@ -1,3 +1,4 @@
+import math
 from typing import Tuple, Union
 
 from pybboxes._typing import BboxType, GenericBboxType
@@ -6,12 +7,12 @@ from pybboxes.boxes.bbox import load_bbox
 
 
 def convert_bbox(
-    bbox: GenericBboxType,
-    from_type: str = None,
-    to_type: str = None,
-    image_size: Tuple[int, int] = None,
-    return_values: bool = True,
-    **kwargs,
+        bbox: GenericBboxType,
+        from_type: str = None,
+        to_type: str = None,
+        image_size: Tuple[int, int] = None,
+        return_values: bool = True,
+        **kwargs,
 ) -> Union[BboxType, BaseBoundingBox]:
     """
     Converts given bbox with given `from_type` to given `to_type`. It uses VOC format
@@ -95,3 +96,24 @@ def compute_iou(bbox1: GenericBboxType, bbox2: GenericBboxType, bbox_type: str =
         Intersection over Union ratio.
     """
     return compute_intersection(bbox1, bbox2, bbox_type, **kwargs) / compute_union(bbox1, bbox2, bbox_type, **kwargs)
+
+
+def compute_distance(bbox1: GenericBboxType, bbox2: GenericBboxType, bbox_type: str = "coco", **kwargs):
+    """
+    Computes distance between bounding boxes centers
+
+    Args:
+        bbox1: Bounding box 1.
+        bbox2: Bounding box 2.
+        bbox_type: Format of the bounding boxes. It's 'coco' [x-tl, y-tl, w, h] by default.
+
+    Returns:
+        Distance in pixels between bounding boxes
+    """
+    bbox1 = load_bbox(name=bbox_type, values=bbox1, **kwargs)
+    bbox2 = load_bbox(name=bbox_type, values=bbox2, **kwargs)
+
+    a = bbox1.to_centerxywh().values[0:2]
+    b = bbox2.to_centerxywh().values[0:2]
+
+    return int(round(math.dist(a, b), 6))
