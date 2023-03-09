@@ -1,3 +1,4 @@
+import math
 import warnings
 from abc import ABC, abstractmethod
 from typing import List, Tuple, Union
@@ -54,6 +55,17 @@ class Box:
 
     def iou(self, other: "Box") -> float:
         return self.intersection(other) / self.union(other)
+
+    def distance(self, other: "Box") -> int:
+        my_y_c = self.y_br + self.height / 2
+        my_x_c = self.x_tl + self.width / 2
+
+        other_y_c = other.y_br + other.height / 2
+        other_x_c = other.x_tl + other.width / 2
+
+        dist = math.dist((my_x_c, my_y_c), (other_x_c, other_y_c))
+
+        return int(round(dist))
 
 
 class BaseBoundingBox(Box, ABC):
