@@ -1,11 +1,12 @@
 from pybboxes.boxes import (
     AlbumentationsBoundingBox,
     BoundingBox,
+    CenterxywhBoundingBox,
     CocoBoundingBox,
     FiftyoneBoundingBox,
     VocBoundingBox,
-    YoloBoundingBox,
+    YoloBoundingBox
 )
 from pybboxes.functional import convert_bbox  # Backwards compatibility
 
-__version__ = "0.2.0"
+__version__ = "0.2.1"
