@@ -171,7 +171,7 @@ class BoundingBox(BaseBoundingBox):
         return load_bbox("yolo", values=(x_c, y_c, w, h), image_size=image_size, strict=strict)
 
     @classmethod
-    def from_center_xywh(
+    def from_centerxywh(
             cls, x_c: int, y_c: int, w: int, h: int, image_size: Tuple[int, int] = None, strict: bool = False
     ):
-        return load_bbox("center_xywh", values=(x_c, y_c, w, h), image_size=image_size, strict=strict)
+        return load_bbox("centerxywh", values=(x_c, y_c, w, h), image_size=image_size, strict=strict)
