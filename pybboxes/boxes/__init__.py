@@ -4,3 +4,4 @@ from pybboxes.boxes.coco_bounding_box import CocoBoundingBox
 from pybboxes.boxes.fiftyone_bounding_box import FiftyoneBoundingBox
 from pybboxes.boxes.voc_bounding_box import VocBoundingBox
 from pybboxes.boxes.yolo_bounding_box import YoloBoundingBox
+from pybboxes.boxes.centerxywh_bounding_box import CenterxywhBoundingBox

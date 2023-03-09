@@ -7,7 +7,8 @@ from pybboxes.boxes.base import BaseBoundingBox
 
 
 def load_bbox(
-    name: str, values, image_size: Tuple[int, int] = None, return_values: bool = False, from_voc: bool = False, **kwargs
+        name: str, values, image_size: Tuple[int, int] = None, return_values: bool = False, from_voc: bool = False,
+        **kwargs
 ) -> BaseBoundingBox:
     def pascalize(snake_string: str) -> str:
         return snake_string.title().replace("_", "")
@@ -29,13 +30,13 @@ def load_bbox(
 
 class BoundingBox(BaseBoundingBox):
     def __init__(
-        self,
-        x_tl: int,
-        y_tl: int,
-        x_br: int,
-        y_br: int,
-        image_size: Tuple[int, int] = None,
-        strict: bool = False,
+            self,
+            x_tl: int,
+            y_tl: int,
+            x_br: int,
+            y_br: int,
+            image_size: Tuple[int, int] = None,
+            strict: bool = False,
     ):
         super(BoundingBox, self).__init__(x_tl, y_tl, x_br, y_br, image_size=image_size, strict=strict)
 
@@ -49,10 +50,10 @@ class BoundingBox(BaseBoundingBox):
         elif (x_tl, y_tl) == (x_br, y_br):
             raise ValueError("Given top-left and bottom-right points must be distinct.")
         elif (
-            not 0 <= x_tl < x_br
-            or not 0 <= y_tl < y_br
-            or (image_width is not None and x_br > image_width)
-            or (image_height is not None and y_br > image_height)
+                not 0 <= x_tl < x_br
+                or not 0 <= y_tl < y_br
+                or (image_width is not None and x_br > image_width)
+                or (image_height is not None and y_br > image_height)
         ):
             if self.strict:
                 raise ValueError(
@@ -109,7 +110,7 @@ class BoundingBox(BaseBoundingBox):
         )
 
     def to_albumentations(
-        self, return_values: bool = False, **kwargs
+            self, return_values: bool = False, **kwargs
     ) -> Union[Tuple[int, int, int, int], "BaseBoundingBox"]:
         return self._to_bbox_type("albumentations", return_values, **kwargs)
 
@@ -125,27 +126,31 @@ class BoundingBox(BaseBoundingBox):
     def to_yolo(self, return_values: bool = False, **kwargs) -> Union[Tuple[int, int, int, int], "BaseBoundingBox"]:
         return self._to_bbox_type("yolo", return_values, **kwargs)
 
+    def to_centerxywh(self, return_values: bool = False, **kwargs) -> Union[
+        Tuple[int, int, int, int], "BaseBoundingBox"]:
+        return self._to_bbox_type("centerxywh", return_values, **kwargs)
+
     @classmethod
     def from_voc(
-        cls,
-        x_tl: int,
-        y_tl: int,
-        x_br: int,
-        y_br: int,
-        image_size: Tuple[int, int] = None,
-        strict: bool = True,
+            cls,
+            x_tl: int,
+            y_tl: int,
+            x_br: int,
+            y_br: int,
+            image_size: Tuple[int, int] = None,
+            strict: bool = True,
     ) -> "BaseBoundingBox":
         return load_bbox("voc", values=(x_tl, y_tl, x_br, y_br), image_size=image_size, strict=strict)
 
     @classmethod
     def from_albumentations(
-        cls,
-        x_tl: float,
-        y_tl: float,
-        x_br: float,
-        y_br: float,
-        image_size: Tuple[int, int] = None,
-        strict: bool = False,
+            cls,
+            x_tl: float,
+            y_tl: float,
+            x_br: float,
+            y_br: float,
+            image_size: Tuple[int, int] = None,
+            strict: bool = False,
     ):
         return load_bbox("albumentations", values=(x_tl, y_tl, x_br, y_br), image_size=image_size, strict=strict)
 
@@ -155,12 +160,18 @@ class BoundingBox(BaseBoundingBox):
 
     @classmethod
     def from_fiftyone(
-        cls, x_tl: float, y_tl: float, w: float, h: float, image_size: Tuple[int, int] = None, strict: bool = False
+            cls, x_tl: float, y_tl: float, w: float, h: float, image_size: Tuple[int, int] = None, strict: bool = False
     ):
         return load_bbox("fiftyone", values=(x_tl, y_tl, w, h), image_size=image_size, strict=strict)
 
     @classmethod
     def from_yolo(
-        cls, x_c: float, y_c: float, w: float, h: float, image_size: Tuple[int, int] = None, strict: bool = False
+            cls, x_c: float, y_c: float, w: float, h: float, image_size: Tuple[int, int] = None, strict: bool = False
     ):
         return load_bbox("yolo", values=(x_c, y_c, w, h), image_size=image_size, strict=strict)
+
+    @classmethod
+    def from_center_xywh(
+            cls, x_c: int, y_c: int, w: int, h: int, image_size: Tuple[int, int] = None, strict: bool = False
+    ):
+        return load_bbox("center_xywh", values=(x_c, y_c, w, h), image_size=image_size, strict=strict)

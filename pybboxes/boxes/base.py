@@ -58,13 +58,13 @@ class Box:
 
 class BaseBoundingBox(Box, ABC):
     def __init__(
-        self,
-        v1: Union[int, float],
-        v2: Union[int, float],
-        v3: Union[int, float],
-        v4: Union[int, float],
-        image_size: Tuple[int, int] = None,
-        strict: bool = False,
+            self,
+            v1: Union[int, float],
+            v2: Union[int, float],
+            v3: Union[int, float],
+            v4: Union[int, float],
+            image_size: Tuple[int, int] = None,
+            strict: bool = False,
     ):
         self._image_size = image_size
         self.strict = strict
@@ -146,6 +146,9 @@ class BaseBoundingBox(Box, ABC):
     def to_yolo(self, return_values: bool = False) -> Union[Tuple[int, int, int, int], "BaseBoundingBox"]:
         return self.to_voc().to_yolo(return_values)
 
+    def to_centerxywh(self, return_values: bool = False) -> Union[Tuple[int, int, int, int], "BaseBoundingBox"]:
+        return self.to_voc().to_centerxywh(return_values)
+
     @property
     def name(self):
         return self.__class__.__name__.lower().replace("boundingbox", "")
@@ -188,13 +191,13 @@ class BaseBoundingBox(Box, ABC):
     @classmethod
     @abstractmethod
     def from_voc(
-        cls,
-        x_tl: int,
-        y_tl: int,
-        x_br: int,
-        y_br: int,
-        image_size: Tuple[int, int] = None,
-        strict: bool = True,
+            cls,
+            x_tl: int,
+            y_tl: int,
+            x_br: int,
+            y_br: int,
+            image_size: Tuple[int, int] = None,
+            strict: bool = True,
     ) -> "BaseBoundingBox":
         pass
 
