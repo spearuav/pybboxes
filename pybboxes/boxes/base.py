@@ -57,10 +57,10 @@ class Box:
         return self.intersection(other) / self.union(other)
 
     def distance(self, other: "Box") -> int:
-        my_y_c = self.y_br + self.height / 2
+        my_y_c = self.y_tl + self.height / 2
         my_x_c = self.x_tl + self.width / 2
 
-        other_y_c = other.y_br + other.height / 2
+        other_y_c = other.y_tl + other.height / 2
         other_x_c = other.x_tl + other.width / 2
 
         dist = math.dist((my_x_c, my_y_c), (other_x_c, other_y_c))
@@ -199,6 +199,14 @@ class BaseBoundingBox(Box, ABC):
             amount = (amount[0] * width, amount[1] * height)
         self._generic_operation("shift", amount)
         return self
+
+    def distance_from_center(self) -> int:
+        bounding_box_center = (self.x_tl + self.width / 2, self.y_tl + self.height / 2)
+        image_center = (self._image_size[0] / 2, self._image_size[1] / 2)
+        print(image_center)
+        print(bounding_box_center)
+        dist = math.dist(bounding_box_center, image_center)
+        return int(round(dist))
 
     @classmethod
     @abstractmethod
