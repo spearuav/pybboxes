@@ -9,4 +9,4 @@ from pybboxes.boxes import (
 )
 from pybboxes.functional import convert_bbox  # Backwards compatibility
 
-__version__ = "0.2.2"
+__version__ = "0.2.3"

@@ -203,8 +203,6 @@ class BaseBoundingBox(Box, ABC):
     def distance_from_center(self) -> int:
         bounding_box_center = (self.x_tl + self.width / 2, self.y_tl + self.height / 2)
         image_center = (self._image_size[0] / 2, self._image_size[1] / 2)
-        print(image_center)
-        print(bounding_box_center)
         dist = math.dist(bounding_box_center, image_center)
         return int(round(dist))
 
