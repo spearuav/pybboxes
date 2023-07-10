@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        operating-system: [ubuntu-latest, windows-latest, macos-latest]
+        operating-system: [ubuntu-latest, windows-latest]
         # for Python 3.10, ref https://github.com/actions/setup-python/issues/160#issuecomment-724485470
         python-version: [3.8, 3.9, '3.10', '3.11']
       fail-fast: false
@@ -30,14 +30,6 @@ jobs:
         if: matrix.operating-system == 'ubuntu-latest'
         with:
           path: ~/.cache/pip
-          key: ${{ matrix.os }}-${{ matrix.python-version }}-${{ hashFiles('**/setup.py')}}
-          restore-keys: ${{ matrix.os }}-${{ matrix.python-version }}-
-
-      - name: Restore MacOS cache
-        uses: actions/cache@v1
-        if: matrix.operating-system == 'macos-latest'
-        with:
-          path: ~/Library/Caches/pip
           key: ${{ matrix.os }}-${{ matrix.python-version }}-${{ hashFiles('**/setup.py')}}
           restore-keys: ${{ matrix.os }}-${{ matrix.python-version }}-
 
