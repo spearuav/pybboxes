@@ -12,7 +12,7 @@ jobs:
       matrix:
         operating-system: [ubuntu-latest, windows-latest]
         # for Python 3.10, ref https://github.com/actions/setup-python/issues/160#issuecomment-724485470
-        python-version: [3.8, 3.9, '3.10', '3.11']
+        python-version: [3.8, 3.9, "3.10", "3.11"]
       fail-fast: false
 
     steps:
@@ -57,3 +57,23 @@ jobs:
       - name: Run tests.
         run: |
           python -m tests.run_tests
+
+      - name: Archive artifacts
+        id: archive_artifacts
+        if: matrix.python-version == '3.9'
+        uses: actions/upload-artifact@v3
+        with:
+          name: vision_controller
+          path: |
+            dist/*.*
+
+      - name: Create Release
+        if: github.ref_type == 'tag' && matrix.python-version == '3.9'
+        uses: softprops/action-gh-release@v0.1.15
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: Release ${{ github.ref_name }}
+          draft: false
+          prerelease: false
+          files: |
+            dist/*.*
