@@ -7,12 +7,12 @@ from pybboxes.boxes.bbox import load_bbox
 
 
 def convert_bbox(
-        bbox: GenericBboxType,
-        from_type: str = None,
-        to_type: str = None,
-        image_size: Tuple[int, int] = None,
-        return_values: bool = True,
-        **kwargs,
+    bbox: GenericBboxType,
+    from_type: str = None,
+    to_type: str = None,
+    image_size: Tuple[int, int] = None,
+    return_values: bool = True,
+    **kwargs,
 ) -> Union[BboxType, BaseBoundingBox]:
     """
     Converts given bbox with given `from_type` to given `to_type`. It uses VOC format
