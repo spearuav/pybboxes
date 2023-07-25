@@ -2,6 +2,7 @@ name: Tests
 
 on:
   push:
+    branches: [main]
   pull_request:
     branches: [main]
 
@@ -10,30 +11,38 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        operating-system: [ubuntu-latest, windows-latest]
+        operating-system: [ubuntu-latest, windows-latest, macos-latest]
         # for Python 3.10, ref https://github.com/actions/setup-python/issues/160#issuecomment-724485470
-        python-version: [3.8, 3.9, "3.10", "3.11"]
+        python-version: [3.8, 3.9, '3.10', '3.11']
       fail-fast: false
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
 
       - name: Restore Ubuntu cache
-        uses: actions/cache@v3
+        uses: actions/cache@v1
         if: matrix.operating-system == 'ubuntu-latest'
         with:
           path: ~/.cache/pip
           key: ${{ matrix.os }}-${{ matrix.python-version }}-${{ hashFiles('**/setup.py')}}
           restore-keys: ${{ matrix.os }}-${{ matrix.python-version }}-
 
+      - name: Restore MacOS cache
+        uses: actions/cache@v1
+        if: matrix.operating-system == 'macos-latest'
+        with:
+          path: ~/Library/Caches/pip
+          key: ${{ matrix.os }}-${{ matrix.python-version }}-${{ hashFiles('**/setup.py')}}
+          restore-keys: ${{ matrix.os }}-${{ matrix.python-version }}-
+
       - name: Restore Windows cache
-        uses: actions/cache@v3
+        uses: actions/cache@v1
         if: matrix.operating-system == 'windows-latest'
         with:
           path: ~\AppData\Local\pip\Cache
@@ -49,35 +58,8 @@ jobs:
 
       - name: Lint with flake8 and black
         run: |
-          # stop the build if there are Python syntax errors or undefined names
-          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-          # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+          python -m tests.run_code_style check
 
       - name: Run tests.
         run: |
           python -m tests.run_tests
-
-      - name: run setup tools
-        run: |
-          python setup.py bdist_wheel
-
-      - name: Archive artifacts
-        id: archive_artifacts
-        if: matrix.python-version == '3.9'
-        uses: actions/upload-artifact@v3
-        with:
-          name: vision_controller
-          path: |
-            dist/*.*
-
-      - name: Create Release
-        if: github.ref_type == 'tag' && matrix.python-version == '3.9'
-        uses: softprops/action-gh-release@v0.1.15
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          name: Release ${{ github.ref_name }}
-          draft: false
-          prerelease: false
-          files: |
-            dist/*.*
