@@ -1,4 +1,4 @@
-name: Tests
+name: CI and Release
 
 on:
   push:
@@ -10,7 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        operating-system: [ubuntu-latest, windows-latest, macos-latest]
         # for Python 3.10, ref https://github.com/actions/setup-python/issues/160#issuecomment-724485470
         python-version: [3.8, 3.9, '3.10', '3.11']
       fail-fast: false
@@ -62,3 +61,24 @@ jobs:
       - name: Run tests.
         run: |
           python -m tests.run_tests
+
+      - name: Install dependencies for release
+        if: github.ref_type == 'tag'
+        run: |
+          pip install setuptools wheel twine
+
+      - name: Build
+        if: github.ref_type == 'tag'
+        run: |
+          python setup.py sdist bdist_wheel
+
+      - name: Create Release
+        if: github.ref_type == 'tag' && matrix.python-version == '3.9'
+        uses: softprops/action-gh-release@v0.1.15
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: Release ${{ github.ref_name }}
+          draft: false
+          prerelease: false
+          files: |
+            dist/*
