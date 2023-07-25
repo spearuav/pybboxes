@@ -5,7 +5,7 @@ from pybboxes.boxes import (
     CocoBoundingBox,
     FiftyoneBoundingBox,
     VocBoundingBox,
-    YoloBoundingBox
+    YoloBoundingBox,
 )
 from pybboxes.functional import convert_bbox  # Backwards compatibility
 

@@ -70,13 +70,13 @@ class Box:
 
 class BaseBoundingBox(Box, ABC):
     def __init__(
-            self,
-            v1: Union[int, float],
-            v2: Union[int, float],
-            v3: Union[int, float],
-            v4: Union[int, float],
-            image_size: Tuple[int, int] = None,
-            strict: bool = False,
+        self,
+        v1: Union[int, float],
+        v2: Union[int, float],
+        v3: Union[int, float],
+        v4: Union[int, float],
+        image_size: Tuple[int, int] = None,
+        strict: bool = False,
     ):
         self._image_size = image_size
         self.strict = strict
@@ -209,13 +209,13 @@ class BaseBoundingBox(Box, ABC):
     @classmethod
     @abstractmethod
     def from_voc(
-            cls,
-            x_tl: int,
-            y_tl: int,
-            x_br: int,
-            y_br: int,
-            image_size: Tuple[int, int] = None,
-            strict: bool = True,
+        cls,
+        x_tl: int,
+        y_tl: int,
+        x_br: int,
+        y_br: int,
+        image_size: Tuple[int, int] = None,
+        strict: bool = True,
     ) -> "BaseBoundingBox":
         pass
 

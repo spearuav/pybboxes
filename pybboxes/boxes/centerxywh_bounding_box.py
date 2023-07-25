@@ -23,8 +23,8 @@ class CenterxywhBoundingBox(BaseBoundingBox):
             raise ValueError("Given width and height must be greater than 0.")
         elif self.strict and (x_c < 0 or y_c < 0):
             raise ValueError("Given top-left point is out of bounds.")
-        elif (image_width is not None and x_c + w/2 > image_width) or (
-                image_width is not None and y_c + h/2 > image_height
+        elif (image_width is not None and x_c + w / 2 > image_width) or (
+            image_width is not None and y_c + h / 2 > image_height
         ):
             if self.strict:
                 raise ValueError(
