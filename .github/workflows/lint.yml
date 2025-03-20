@@ -1,0 +1,10 @@
+name: Lint
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  lint:
+    uses: spearuav/org-wide-linting-configs/.github/workflows/lint.yml@main
+    secrets: inherit
