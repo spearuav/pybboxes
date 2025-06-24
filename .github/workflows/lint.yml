@@ -1,11 +1,11 @@
-name: Lint Skip Temporary
+name: Lint
 
 on:
   push:
   pull_request:
 
 jobs:
-  skip:
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "Skipping lint workflow temporarily due to GitHub Actions bug"
+  lint:
+    uses: spearuav/org-wide-linting-configs/.github/workflows/lint.yml@main
+    secrets: inherit
+    
