@@ -1,0 +1,16 @@
+name: PR Template Validation
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  validate-pr-template:
+    uses: spearuav/org-wide-linting-configs/.github/workflows/pr-template-validation.yml@main
+    permissions:
+      contents: read
+      pull-requests: write

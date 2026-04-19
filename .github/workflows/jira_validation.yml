@@ -1,0 +1,30 @@
+name: Jira Validation
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened, ready_for_review, closed]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  validate-ticket:
+    if: github.event.action != 'closed'
+    uses: spearuav/org-wide-linting-configs/.github/workflows/jira-ticket-validation.yml@main
+    permissions:
+      contents: read
+      pull-requests: write
+    secrets:
+      JIRA_USER: ${{ secrets.JIRA_USER }}
+      JIRA_TOKEN: ${{ secrets.JIRA_TOKEN }}
+
+  transition-on-merge:
+    if: github.event.action == 'closed' && github.event.pull_request.merged == true
+    uses: spearuav/org-wide-linting-configs/.github/workflows/jira-ticket-transition.yml@main
+    permissions:
+      contents: read
+      pull-requests: write
+    secrets:
+      JIRA_USER: ${{ secrets.JIRA_USER }}
+      JIRA_TOKEN: ${{ secrets.JIRA_TOKEN }}
