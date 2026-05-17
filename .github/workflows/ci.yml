@@ -70,7 +70,7 @@ jobs:
 
       - name: Create Release
         if: github.ref_type == 'tag' && matrix.python-version == '3.9'
-        uses: softprops/action-gh-release@v0.1.15
+        uses: softprops/action-gh-release@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           name: Release ${{ github.ref_name }}
