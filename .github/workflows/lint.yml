@@ -1,11 +1,14 @@
 name: Lint
 
 on:
-  push:
   pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: lint-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   lint:
     uses: spearuav/org-wide-linting-configs/.github/workflows/lint.yml@main
     secrets: inherit
-    
